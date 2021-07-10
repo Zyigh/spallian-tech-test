@@ -1,6 +1,6 @@
 {% if app.user %}
-    <div style="text-align: right;">
-        <a href={{ path("logout") }}>
+    <div class="d-flex flex-lg-row-reverse">
+        <a class="btn btn-danger mr-4 p-2" href={{ path("logout") }}>
             Logout
         </a>
     </div>

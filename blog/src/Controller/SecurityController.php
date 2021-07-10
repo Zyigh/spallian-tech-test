@@ -12,7 +12,7 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
 {
-    const ARTICLES_ROUTE = 'articles';
+    const ARTICLES_ROUTE = 'article_index';
 
     /**
      * @Route(name="login")
