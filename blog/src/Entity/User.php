@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -11,13 +13,19 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class User implements UserInterface
 {
+    /**
+     *
+     */
     const ROLE_ADMIN = ['ROLE_ADMIN'];
+    /**
+     *
+     */
     const ROLE_USER = ['ROLE_USER'];
 
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", options={"unsigned"=true})
      */
     private $id;
 
@@ -40,6 +48,23 @@ class User implements UserInterface
      */
     private $password;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Article::class, mappedBy="author", orphanRemoval=true)
+     */
+    private $articles;
+
+    /**
+     * User constructor.
+     */
+    public function __construct()
+    {
+        $this->articles = new ArrayCollection();
+    }
+
+    /**
+     *
+     * @return int|null
+     */
     public function getId(): ?int
     {
         return $this->id;
@@ -53,6 +78,10 @@ class User implements UserInterface
         return (string) $this->email;
     }
 
+    /**
+     *
+     * @return string|null
+     */
     public function getEmail(): ?string
     {
         return $this->email;
@@ -85,6 +114,11 @@ class User implements UserInterface
         return null;
     }
 
+    /**
+     * @param string $email
+     *
+     * @return $this
+     */
     public function setEmail(string $email): self
     {
         $this->email = $email;
@@ -92,6 +126,11 @@ class User implements UserInterface
         return $this;
     }
 
+    /**
+     * @param string $password
+     *
+     * @return $this
+     */
     public function setPassword(string $password): self
     {
         $this->password = $password;
@@ -99,6 +138,11 @@ class User implements UserInterface
         return $this;
     }
 
+    /**
+     * @param array $roles
+     *
+     * @return $this
+     */
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;
@@ -112,5 +156,45 @@ class User implements UserInterface
     public function eraseCredentials()
     {
         // $this->plainPassword = null;
+    }
+
+    /**
+     * @return Collection|Article[]
+     */
+    public function getArticles(): Collection
+    {
+        return $this->articles;
+    }
+
+    /**
+     * @param Article $article
+     *
+     * @return $this
+     */
+    public function addArticle(Article $article): self
+    {
+        if (!$this->articles->contains($article)) {
+            $this->articles[] = $article;
+            $article->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Article $article
+     *
+     * @return $this
+     */
+    public function removeArticle(Article $article): self
+    {
+        if ($this->articles->removeElement($article)) {
+            // set the owning side to null (unless already changed)
+            if ($article->getAuthor() === $this) {
+                $article->setAuthor(null);
+            }
+        }
+
+        return $this;
     }
 }
