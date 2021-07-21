@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
+use http\Encoding\Stream\Inflate;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -196,5 +197,13 @@ class User implements UserInterface
         }
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString(): string
+    {
+        return $this->email;
     }
 }

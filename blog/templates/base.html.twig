@@ -6,17 +6,22 @@
         <link rel="shortcut icon" href={{ asset("favicon.ico") }} type="image/x-icon">
         <title>{% block title %}Spallian Blog - {% endblock %}</title>
 
+        <link rel="stylesheet" href="{{ asset("bootstrap/bootstrap.min.css") }}">
         {% block stylesheets %}
         {% endblock %}
 
+        <script type="application/javascript" defer src="{{ asset("bootstrap/bootstrap.min.js") }}"></script>
+        <script type="application/javascript" defer src="{{ asset("bootstrap/bootstrap.bundle.min.js") }}"></script>
         {% block javascripts %}
         {% endblock %}
     </head>
     <body>
+        <div class="container py-2">
+        {{ include("./_partials/_header.html.twig") }}
         {% block body %}
-            {{ include("./_partials/_header.html.twig") }}
                 {% block content %}{% endblock %}
-            {{ include("./_partials/_footer.html.twig") }}
         {% endblock %}
+        {{ include("./_partials/_footer.html.twig") }}
+        </div>
     </body>
 </html>
